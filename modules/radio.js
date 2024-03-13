@@ -3,7 +3,7 @@ const { AudioPlayerStatus ,createAudioPlayer, joinVoiceChannel, createAudioResou
 const STATIONS = require('./stations.js');
 
 function play_radio(message){
-    const url = STATIONS.PlayRadio;
+    const url = STATIONS.PakaoRadio;
     const player = createAudioPlayer();
     const song = createAudioResource(url, {inputType: StreamType.Arbitrary });
     const channel = message.member.voice.channel;
