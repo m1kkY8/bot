@@ -1,11 +1,13 @@
 const { Client, Events, GatewayIntentBits, Partials } = require('discord.js');
 const { AudioPlayerStatus ,createAudioPlayer, joinVoiceChannel, createAudioResource, StreamType } = require('@discordjs/voice');
-const STATIONS = require('./stations.js');
 
-function play_radio(message){
-    const url = STATIONS.PakaoRadio;
+function play_radio(message, stations){
+    
+    const station_url = stations.url;
+    const station_name = stations.name;
+
     const player = createAudioPlayer();
-    const song = createAudioResource(url, {inputType: StreamType.Arbitrary });
+    const song = createAudioResource(station_url, {inputType: StreamType.Arbitrary });
     const channel = message.member.voice.channel;
 
     if(channel != null){
@@ -18,7 +20,7 @@ function play_radio(message){
         connection.subscribe(player);
         player.play(song);
 
-        message.reply('Play radio');
+        message.reply(`Playing ${station_name}`);
 
     } else {
         message.reply('join voice first');

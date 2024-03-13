@@ -1,4 +1,12 @@
 module.exports = {
-    PlayRadio: "https://stream.playradio.rs:8443/play.aac",
-    PakaoRadio: "https://securestream.pakaoradio.net/live",
+
+    PlayRadio: {
+        url: "https://stream.playradio.rs:8443/play.aac", 
+        name: "Play Radio" 
+    },
+    
+    PakaoRadio: {
+        url: "https://securestream.pakaoradio.net/live",
+        name: "Pakao Radio",
+    }
 }

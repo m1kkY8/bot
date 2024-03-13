@@ -1,8 +1,7 @@
 const { Client, Events, GatewayIntentBits, Partials } = require('discord.js');
 const { token } = require('./config.json');
 
-const radio = require('./modules/stations.js');
-
+const STATIONS = require('./modules/stations.js'); 
 const play_radio = require('./modules/radio.js');
 const play_song = require('./modules/music.js');
 
@@ -28,8 +27,17 @@ client.on(Events.MessageCreate, (message) => {
 })
 
 client.on(Events.MessageCreate, (message) => {
-    if(message.content.toLowerCase() === '!radio'){
-        play_radio(message);
+    const command = message.content.toLowerCase().split(" ");
+
+    if(command[0] === '!radio'){
+        const station = command[1];
+        if (station.toLowerCase() === 'play'){
+            play_radio(message, STATIONS.PlayRadio);          
+        } else if (station.toLowerCase() === 'pakao'){
+            play_radio(message, STATIONS.PakaoRadio);
+        }
+
+
     }
 });
 
