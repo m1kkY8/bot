@@ -1,11 +1,9 @@
-const { Client, Events, GatewayIntentBits, Partials, EmbedBuilder} = require('discord.js');
+const { Client, Events, GatewayIntentBits, Partials, EmbedBuilder, MessageActivityType} = require('discord.js');
 const { token } = require('./config.json');
 
-const STATIONS = require('./modules/stations.js'); 
+const Stations = require('./modules/stations.js'); 
 const play_radio = require('./modules/radio.js');
 const play_song = require('./modules/music.js');
-
-const log = console.log 
 
 const client = new Client({
     intents: [
@@ -22,23 +20,18 @@ const client = new Client({
 });
 
 const station_list = [];
-Object.entries(STATIONS).forEach((ent) => {
+Object.entries(Stations).forEach((ent) => {
     let val = ent[1];
     station_list.push(val);
 })
 
 function generateRadioTable(station_list){
-    let message_content = "";
+    let radio_table = "";
     for(let i = 0; i < station_list.length; i++){
-        message_content += `${i + 1}. ${station_list[i].name} \n`;
+        radio_table += `${i + 1}. ${station_list[i].name} \n`;
     }
-
-    return message_content;
+    return radio_table;
 }
-
-client.on(Events.MessageCreate, (message) => {
-    log(message.content);
-})
 
 client.on(Events.MessageCreate, (message) => {
     const command = message.content.toLowerCase().split(" ");
@@ -46,11 +39,22 @@ client.on(Events.MessageCreate, (message) => {
     if(command[0] === '!radio'){
         if(command[1]){
             const station_number = Number.parseInt(command[1]) - 1;
+            if(station_number > station_list.length - 1){
+                message.reply("Losa stanica jebem te ustima");
+                return;
+            }
             play_radio(message, station_list[station_number]);
         } else {
+
             const radio_table = generateRadioTable(station_list);
+            const embed = new EmbedBuilder()
+                .setColor(0x800080)
+                .setTitle('Radio')
+                .setAuthor({name: client.user.username})
+                .addFields( { name: 'Dostupne Stanice', value: radio_table })
+                .setTimestamp();
             
-            message.reply(radio_table);
+            message.reply({embeds: [embed] });
         }
     }
 });
@@ -62,7 +66,7 @@ client.on(Events.MessageCreate, (message) => {
 });
 
 client.once(Events.ClientReady, () => {
-    log('online');
+    console.log('online');
 });
 
 client.login(token);
