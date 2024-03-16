@@ -1,9 +1,11 @@
-const { Client, Events, GatewayIntentBits, Partials, EmbedBuilder, MessageActivityType} = require('discord.js');
+const { Client, Events, Collection, GatewayIntentBits, Partials, EmbedBuilder, MessageActivityType} = require('discord.js');
 const { token } = require('./config.json');
+
+const fs = require('node:fs');
+const path = require('node:path');
 
 const Stations = require('./modules/stations.js'); 
 const play_radio = require('./modules/radio.js');
-const play_song = require('./modules/music.js');
 
 const client = new Client({
     intents: [
@@ -17,6 +19,43 @@ const client = new Client({
         Partials.Channel,
         Partials.Message
     ]
+});
+
+//slash commands handler
+client.commands = new Collection(); 
+
+const folders_path = path.join(__dirname, 'commands');
+const commands_folder = fs.readdirSync(folders_path);
+
+for (const folder of commands_folder) {
+
+	const commands_path = path.join(folders_path, folder);
+	const command_files = fs.readdirSync(commands_path).filter(file => file.endsWith('.js'));
+
+	for (const file of command_files) {
+
+		const filePath = path.join(commands_path, file);
+		const command = require(filePath);
+
+		if ('data' in command && 'execute' in command) {
+			client.commands.set(command.data.name, command);
+		} else {
+			console.log(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
+		}
+	}
+} 
+
+client.on(Events.InteractionCreate, async interaction => {
+    if(!interaction.isChatInputCommand()) return;
+
+    const command = interaction.client.commands.get(interaction.commandName);
+    if(!command) return;
+
+    try {
+        await command.execute(interaction);
+    } catch(error){
+        console.error(error);
+    }
 });
 
 const station_list = [];
@@ -56,12 +95,6 @@ client.on(Events.MessageCreate, (message) => {
             
             message.reply({embeds: [embed] });
         }
-    }
-});
-
-client.on(Events.MessageCreate, (message) => {
-    if(message.content.toLowerCase() === '!play'){
-        play_song(message);
     }
 });
 
