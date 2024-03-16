@@ -1,10 +1,26 @@
-const { Client, Events, GatewayIntentBits, Partials } = require('discord.js');
+const {EmbedBuilder} = require('discord.js');
 const { 
     createAudioPlayer, 
     joinVoiceChannel, 
     createAudioResource, 
     StreamType, 
     NoSubscriberBehavior } = require('@discordjs/voice');
+
+const Stations = require('./stations.js');
+
+const station_list = [];
+Object.entries(Stations).forEach((ent) => {
+    let val = ent[1];
+    station_list.push(val);
+})
+
+function generateRadioTable (station_list){
+    let radio_table = "";
+    for(let i = 0; i < station_list.length; i++){
+        radio_table += `${i + 1}. ${station_list[i].name} \n`;
+    }
+    return radio_table;
+}
 
 function play_radio(message, stations){
 
@@ -36,4 +52,29 @@ function play_radio(message, stations){
     }
 }
 
-module.exports = play_radio;
+function handle_radio(message, client){
+    const command = message.content.toLowerCase().split(" ");
+
+    if(command[0] === '!radio'){
+        if(command[1]){
+            const station_number = Number.parseInt(command[1]) - 1;
+            if(station_number > station_list.length - 1){
+                message.reply("Losa stanica jebem te ustima");
+                return;
+            }
+            play_radio(message, station_list[station_number]);
+        } else {
+            const radio_table = generateRadioTable(station_list);
+            const embed = new EmbedBuilder()
+            .setColor(0x800080)
+            .setTitle('Radio')
+            .setAuthor({name: client.user.username})
+            .addFields( { name: 'Dostupne Stanice', value: radio_table })
+            .setTimestamp();
+
+            message.reply({embeds: [embed] });
+        }
+    }
+}
+
+module.exports = handle_radio;
