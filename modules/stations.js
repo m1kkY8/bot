@@ -1,4 +1,8 @@
 module.exports = {
+    Persona: {
+        url: '/home/tox/Music/Persona 5 - Beneath the Mask.mp3',
+        name: "Late Night Special",
+    },
     NaxiCaffe: {
         url: "https://naxidigital-cafe128ssl.streaming.rs:8022/;*.mp3",
         name: "Naxi Caffe"
