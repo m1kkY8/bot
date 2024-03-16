@@ -66,7 +66,6 @@ client.on(Events.InteractionCreate, async interaction => {
 client.on(Events.MessageCreate, message => {
     if(message.content.toLowerCase().startsWith('!radio')){
         handle_radio(message, client);
-        console.log('ene');
     }
 });
 
