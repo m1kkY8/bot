@@ -56,15 +56,21 @@ function handle_radio(message, client){
     const command = message.content.toLowerCase().split(" ");
 
     if(command[1]){
+        
+        let station_number;
+        try {
+            station_number = Number.parseInt(command[1]) - 1;
+            play_radio(message, station_list[station_number]);
 
-        const station_number = Number.parseInt(command[1]) - 1;
+        } catch (error){
+            message.reply('jebem te ustima');
+            return;
+        }
 
         if(station_number > station_list.length - 1){
             message.reply("Losa stanica jebem te ustima");
             return;
         }
-
-        play_radio(message, station_list[station_number]);
 
     } else {
         const radio_table = generateRadioTable(station_list);
