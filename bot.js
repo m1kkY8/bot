@@ -1,4 +1,4 @@
-const { Client, Events, Collection, GatewayIntentBits, Partials, EmbedBuilder, MessageActivityType} = require('discord.js');
+const { Client, Events, GatewayIntentBits, Partials } = require('discord.js');
 const { token } = require('./config.json');
 
 const handle_radio = require('./modules/radio.js');

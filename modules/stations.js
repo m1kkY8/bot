@@ -1,4 +1,5 @@
 module.exports = {
+    //FIX: CAN REMOVE THIS SINCE ITS LOCAL FILE
     Persona: {
         url: '/home/tox/Music/Persona 5 - Beneath the Mask.mp3',
         name: "Late Night Special",
