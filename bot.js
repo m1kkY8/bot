@@ -1,5 +1,5 @@
 const { Client, Events, GatewayIntentBits, Partials } = require('discord.js');
-const { token } = require('./config.json');
+const { test_token } = require('./config.json');
 
 const handle_radio = require('./modules/radio.js');
 
@@ -24,7 +24,7 @@ const client = new Client({
 
 // Radio handler
 client.on(Events.MessageCreate, message => {
-    if(message.content.toLowerCase().startsWith('!radio')){
+    if(message.content.toLowerCase().startsWith('.radio')){
         handle_radio(message, client);
     }
 });
@@ -33,4 +33,4 @@ client.once(Events.ClientReady, () => {
     console.log('online');
 });
 
-client.login(token);
+client.login(test_token);
