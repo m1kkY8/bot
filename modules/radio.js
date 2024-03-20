@@ -47,7 +47,7 @@ function play_radio(message, stations){
         message.reply(`Playing ${station_name}`);
 
     } else {
-        message.reply('join voice first');
+        message.reply(`nisi u vojsu majmune`);
         return;
     }
 }
