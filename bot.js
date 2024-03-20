@@ -24,7 +24,7 @@ const client = new Client({
 
 // Radio handler
 client.on(Events.MessageCreate, message => {
-    if(message.content.toLowerCase().startsWith('.radio')){
+    if(message.content.toLowerCase().startsWith('!radio')){
         handle_radio(message, client);
     }
 });
