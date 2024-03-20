@@ -1,5 +1,5 @@
 const { Client, Events, GatewayIntentBits, Partials } = require('discord.js');
-const { test_token } = require('./config.json');
+const { token } = require('./config.json');
 
 const handle_radio = require('./modules/radio.js');
 
@@ -33,4 +33,4 @@ client.once(Events.ClientReady, () => {
     console.log('online');
 });
 
-client.login(test_token);
+client.login(token);
