@@ -30,7 +30,7 @@ client.on(Events.MessageCreate, message => {
 });
 
 client.once(Events.ClientReady, () => {
-    console.log('online');
+    console.log('dev bot');
 });
 
 client.login(test_token);
