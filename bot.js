@@ -1,6 +1,7 @@
 const { Client, Events, GatewayIntentBits, Partials } = require('discord.js');
 const { test_token } = require('./config.json');
 
+const amogus = require('./modules/youtue.js');
 const handle_radio = require('./modules/radio.js');
 
 const client = new Client({
@@ -17,7 +18,7 @@ const client = new Client({
     ]
 });
 
-//TODO: ZA IMPLEMENTACIJU
+// TODO: ZA IMPLEMENTACIJU
 //Ako ima jos neka komanda
 //Eventualno prebaciti radio da bude slash komanda mada i ne mora
 //Probati dal radi muzika sa yta
@@ -26,6 +27,8 @@ const client = new Client({
 client.on(Events.MessageCreate, message => {
     if(message.content.toLowerCase().startsWith('.radio')){
         handle_radio(message, client);
+    } else if(message.content.toLowerCase().startsWith('.play')){
+        amogus(message, client);
     }
 });
 
