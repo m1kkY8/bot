@@ -22,68 +22,60 @@ function generateRadioTable (station_list){
     return radio_table;
 }
 
-function play_radio(message, stations){
-
-    const station_url = stations.url;
-    const station_name = stations.name;
+function play_radio(message, station){
+    
+    const { url, name } = station
 
     const player = createAudioPlayer({
         behaviors: NoSubscriberBehavior.Play
     });
 
-    const song = createAudioResource(station_url, {inputType: StreamType.Arbitrary });
+    const song = createAudioResource(url, {inputType: StreamType.Arbitrary });
     const channel = message.member.voice.channel;
 
-    if(channel != null){
-        const connection = joinVoiceChannel({
-            channelId: message.member.voice.channel.id,
-            guildId: message.guild.id,
-            adapterCreator: message.guild.voiceAdapterCreator 
-        })
-
-        connection.subscribe(player);
-        player.play(song);
-
-        message.reply(`Playing ${station_name}`);
-
-    } else {
+    if(!channel){
         message.reply(`nisi u vojsu majmune`);
         return;
     }
+
+    const connection = joinVoiceChannel({
+        channelId: channel.id, 
+        guildId: message.guild.id,
+        adapterCreator: message.guild.voiceAdapterCreator });
+
+    connection.subscribe(player);
+    player.play(song);
+
+    message.reply(`Svira ${name}`);
 }
 
-function handle_radio(message, client){
+function handle_radio(message){
     const command = message.content.toLowerCase().split(" ");
 
     if(command[1]){
-        
-        let station_number;
-        try {
-            station_number = Number.parseInt(command[1]) - 1;
-            play_radio(message, station_list[station_number]);
 
-        } catch (error){
+        const station_number = parseInt(command[1]) - 1;
+
+        if(isNaN(station_number) || station_number > station_list.length - 1){
             message.reply('jebem te ustima');
             return;
         }
 
-        if(station_number > station_list.length - 1){
-            message.reply("Losa stanica jebem te ustima");
-            return;
-        }
+        play_radio(message, station_list[station_number]);
 
     } else {
         const radio_table = generateRadioTable(station_list);
-
         const embed = new EmbedBuilder()
-            .setColor(0x800080)
-            .setTitle('Radio')
-            .setAuthor({name: client.user.username})
-            .addFields( { name: 'Dostupne Stanice', value: radio_table })
-            .setTimestamp();
+        .setColor(0x800080)
+        .setTitle('Radio')
+        .addFields( { name: 'Dostupne Stanice', value: radio_table })
+        .setTimestamp();
 
         message.reply({embeds: [embed] });
     }
 }
 
-module.exports = handle_radio;
+module.exports = {
+    command_name: 'radio',
+    command: handle_radio
+}

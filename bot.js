@@ -1,8 +1,7 @@
 const { Client, Events, GatewayIntentBits, Partials } = require('discord.js');
-const { token } = require('./config.json');
-
-const amogus = require('./modules/youtue.js');
-const handle_radio = require('./modules/radio.js');
+const fs = require('node:fs');
+const path = require('node:path');
+const { dev_token, prefix } = require('./config.json');
 
 const client = new Client({
     intents: [
@@ -18,6 +17,22 @@ const client = new Client({
     ]
 });
 
+const commands = [];
+
+const commands_path = path.join(__dirname, 'modules');
+const commands_files = fs.readdirSync(commands_path)
+    .filter( file => file.endsWith('.js') && !file.startsWith('station'));
+
+for (const file of commands_files){
+    const file_path = path.join(commands_path, file);
+
+    const command = require(file_path);
+    commands.push(command);
+
+}
+
+console.log(commands);
+
 // TODO: ZA IMPLEMENTACIJU
 //Ako ima jos neka komanda
 //Eventualno prebaciti radio da bude slash komanda mada i ne mora
@@ -25,11 +40,17 @@ const client = new Client({
 
 // Radio handler
 client.on(Events.MessageCreate, message => {
-    if(message.content.toLowerCase().startsWith('!radio')){
-        handle_radio(message, client);
-    } else if(message.content.toLowerCase().startsWith('.play')){
-        amogus(message, client);
-    }
+
+    if (message.content.toLowerCase().startsWith(prefix)){
+        const args = message.content.toLowerCase().split(' ');
+        const cmd_name = args[0].substring(1);
+        const command = commands
+            .find(cmd => cmd.command_name.startsWith(cmd_name));
+        
+        if(command){
+            command.command(message);
+        }
+    } 
 });
 
 client.once(Events.ClientReady, () => {
