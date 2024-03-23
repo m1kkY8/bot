@@ -7,6 +7,7 @@ const {
     NoSubscriberBehavior } = require('@discordjs/voice');
 
 const Stations = require('./stations.js');
+const { stat } = require('fs');
 
 const station_list = [];
 Object.entries(Stations).forEach((ent) => {
@@ -60,6 +61,7 @@ function handle_radio(message){
         let station_number;
         try {
             station_number = Number.parseInt(command[1]) - 1;
+            console.log(station_number);
             play_radio(message, station_list[station_number]);
 
         } catch (error){

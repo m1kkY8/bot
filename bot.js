@@ -42,7 +42,8 @@ console.log(commands);
 client.on(Events.MessageCreate, message => {
 
     if (message.content.toLowerCase().startsWith(prefix)){
-        const cmd_name = message.content.toLowerCase().substring(1);
+        const args = message.content.toLowerCase().split(' ');
+        const cmd_name = args[0].substring(1);
         const command = commands
             .find(cmd => cmd.command_name.startsWith(cmd_name));
         
