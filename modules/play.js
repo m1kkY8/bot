@@ -1,7 +1,7 @@
 const { createAudioPlayer, joinVoiceChannel, createAudioResource, StreamType, NoSubscriberBehavior } = require('@discordjs/voice');
 const play = require('play-dl');
 
-async function play_radio(message){
+async function play_youtube(message){
     
     const args = message.content.split(' ');
     const link = args[1]; 
@@ -44,5 +44,5 @@ async function play_radio(message){
 
 module.exports = {
     command_name: 'play',
-    command: play_radio 
+    command: play_youtube 
 }
