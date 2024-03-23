@@ -33,7 +33,7 @@ client.on(Events.MessageCreate, message => {
 });
 
 client.once(Events.ClientReady, () => {
-    console.log('dev bot');
+    console.log('Srecko Online');
 });
 
 client.login(token);
