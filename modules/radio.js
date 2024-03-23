@@ -52,7 +52,7 @@ function play_radio(message, stations){
     }
 }
 
-function handle_radio(message, client){
+function handle_radio(message){
     const command = message.content.toLowerCase().split(" ");
 
     if(command[1]){
@@ -78,7 +78,6 @@ function handle_radio(message, client){
         const embed = new EmbedBuilder()
             .setColor(0x800080)
             .setTitle('Radio')
-            .setAuthor({name: client.user.username})
             .addFields( { name: 'Dostupne Stanice', value: radio_table })
             .setTimestamp();
 
@@ -86,4 +85,7 @@ function handle_radio(message, client){
     }
 }
 
-module.exports = handle_radio;
+module.exports = {
+    command_name: 'radio',
+    command: handle_radio
+}
