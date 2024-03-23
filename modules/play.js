@@ -1,6 +1,5 @@
 const { createAudioPlayer, joinVoiceChannel, createAudioResource, StreamType, NoSubscriberBehavior } = require('@discordjs/voice');
 const play = require('play-dl');
-const fs = require('node:fs');
 
 async function play_radio(message){
     
@@ -17,7 +16,14 @@ async function play_radio(message){
     });
     
     const stream = await play.stream(link);
-    const song = createAudioResource(stream.stream, {inputType: stream.type});
+    const video_info = await play.video_basic_info(link);
+    
+    const song = {
+        title: video_info.video_details.title,
+        duration: video_info.video_details.durationInSec
+    }
+
+    const audio_resource = createAudioResource(stream.stream, {inputType: stream.type});
     const channel = message.member.voice.channel;
 
     if(!channel){
@@ -31,9 +37,9 @@ async function play_radio(message){
         adapterCreator: message.guild.voiceAdapterCreator });
 
     connection.subscribe(player);
-    player.play(song);
+    player.play(audio_resource);
 
-    message.reply(`Svira`);
+    message.reply(`${song.title}`);
 }
 
 module.exports = {
