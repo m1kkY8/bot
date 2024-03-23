@@ -31,14 +31,8 @@ for (const file of commands_files){
 
 }
 
-console.log(commands);
+console.log(`loaded ${commands.length} commands`);
 
-// TODO: ZA IMPLEMENTACIJU
-//Ako ima jos neka komanda
-//Eventualno prebaciti radio da bude slash komanda mada i ne mora
-//Probati dal radi muzika sa yta
-
-// Radio handler
 client.on(Events.MessageCreate, message => {
 
     if (message.content.toLowerCase().startsWith(prefix)){
