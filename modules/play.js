@@ -37,7 +37,6 @@ async function play_youtube(message){
     connection.subscribe(player);
     player.play(audio_resource);
 
-    message.reply(`${song.title}`);
 }
 
 module.exports = {
