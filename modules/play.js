@@ -2,7 +2,7 @@ const { createAudioPlayer, joinVoiceChannel, createAudioResource, StreamType, No
 const play = require('play-dl');
 
 play.setToken({
-    useragent: "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36"
+    useragent: ["Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36"]
 })
 
 async function play_youtube(message){
