@@ -16,12 +16,6 @@ async function play_youtube(message){
     });
     
     const stream = await play.stream(link);
-    const video_info = await play.video_basic_info(link);
-    
-    const song = {
-        title: video_info.video_details.title,
-        duration: video_info.video_details.durationInSec
-    }
 
     const audio_resource = createAudioResource(stream.stream, {inputType: stream.type});
     const channel = message.member.voice.channel;
