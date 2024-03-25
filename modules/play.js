@@ -3,7 +3,7 @@ const play = require('play-dl');
 
 play.setToken({
     youtube: {
-        cookie: "AFmmF2swRQIgKURM09dNOyLP_C4Igu1yP-jUPzKzxlTMo2cJ7XAX0U4CIQDBBVnW4sg6YrD95qrh6ClXtX_J6FoQ0fKB08NBbUbnLw:QUQ3MjNmd1FtTC1lUlVXaUxTWG11alpDOEoyQTk0MzhEMHVGVklXUTBLOTdGOG8yMnQ5UmpXYWtwSDhjcW41UU4tNzFFSGxjNUsxbkhyajdKU2lwbXBlT05GYUoxWlA2YXlrRi0zSEFRdkxrWjVfbnJERVp5OWdzZEpGdHBTTnpzVGtsYlh1eFVjMlFrTFd1WFlvS1dHZ2dqQmFlbkVuajJR",
+        cookie: "~/Downloads/youtube.com_cookies.txt",
     }
 })
 
