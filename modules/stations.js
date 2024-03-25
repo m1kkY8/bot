@@ -1,4 +1,4 @@
-module.exports = {
+const stations = {
     NaxiRock: {
         url: "https://naxidigital-rock128ssl.streaming.rs:8182/;*.mp3",
         name: "Naxi Rock",
@@ -8,7 +8,7 @@ module.exports = {
     NaxiCaffe: {
         url: "https://naxidigital-cafe128ssl.streaming.rs:8022/;*.mp3",
         name: "Naxi Caffe",
-        info: "https://www.naxi.rs/stations/rs-rock.json",
+        info: "https://www.naxi.rs/stations/rs-cafe.json",
         now_playing: false 
     },
     NaxiJazz: {
@@ -30,3 +30,32 @@ module.exports = {
         now_playing: false 
     },
 }
+
+
+function generate_list(){
+
+    const station_list = [];
+
+    Object.entries(stations).forEach((ent) => {
+        let val = ent[1];
+        station_list.push(val);
+    })
+
+    return station_list;
+}
+
+function generate_radio_table(){
+    const stations = generate_list();
+
+    let radio_table = "";
+    for(let i = 0; i < stations.length; i++){
+        radio_table += `${i + 1}. ${stations[i].name} \n`;
+    }
+    return radio_table;
+}
+
+module.exports = {
+    generate_list,
+    generate_radio_table
+
+};

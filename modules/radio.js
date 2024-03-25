@@ -1,30 +1,36 @@
+const axios = require('axios');
+const cheerio = require('cheerio');
+const { generate_radio_table, generate_list } = require('./stations.js');
+
 const { EmbedBuilder } = require('discord.js');
-const { 
-    createAudioPlayer, 
-    joinVoiceChannel, 
-    createAudioResource, 
-    StreamType, 
-    NoSubscriberBehavior } = require('@discordjs/voice');
+const { createAudioPlayer, joinVoiceChannel, createAudioResource, StreamType, NoSubscriberBehavior } = require('@discordjs/voice');
 
-const Stations = require('./stations.js');
+let current_station = 0;
+const stations = generate_list();
 
-const station_list = [];
-Object.entries(Stations).forEach((ent) => {
-    let val = ent[1];
-    station_list.push(val);
-})
+function get_song_info(message, station) {
 
-function generateRadioTable (station_list){
-    let radio_table = "";
-    for(let i = 0; i < station_list.length; i++){
-        radio_table += `${i + 1}. ${station_list[i].name} \n`;
-    }
-    return radio_table;
+    const { info } = station; 
+
+    axios.get(info)
+        .then(response => {
+            const data = response.data.rs;
+
+            const $ = cheerio.load(data);
+            $('.details p i').remove();
+            const currentSongDetails = $('.details p').text();
+            const [artist, songName] = currentSongDetails.split(' - ');
+
+            message.reply(`${artist.trim()} - ${songName.trim()}`);
+        })
+        .catch(error => {
+            console.error('Uhvatili smo kurac zbog:', error);
+        });
 }
 
 function play_radio(message, station){
-    
-    const { url, name } = station
+
+    let { url, name} = station
 
     const player = createAudioPlayer({
         behaviors: NoSubscriberBehavior.Play
@@ -52,19 +58,25 @@ function play_radio(message, station){
 function handle_radio(message){
     const command = message.content.toLowerCase().split(" ");
 
+    if(command[1] === 'np'){
+        get_song_info(message, stations[current_station]);
+        return;
+    }
+
     if(command[1]){
 
-        const station_number = parseInt(command[1]) - 1;
+        current_station = parseInt(command[1]) - 1;
 
-        if(isNaN(station_number) || station_number > station_list.length - 1){
+        if(isNaN(current_station) || current_station > stations.length - 1){
             message.reply('jebem te ustima');
             return;
         }
 
-        play_radio(message, station_list[station_number]);
+        stations[current_station].now_playing = true;
+        play_radio(message, stations[current_station]);
 
     } else {
-        const radio_table = generateRadioTable(station_list);
+        const radio_table = generate_radio_table(stations);
         const embed = new EmbedBuilder()
         .setColor(0x800080)
         .setTitle('Radio')
