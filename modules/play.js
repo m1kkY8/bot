@@ -4,7 +4,8 @@ const play = require('synthara-streams');
 async function play_youtube(message){
     
     const args = message.content.split(' ');
-    const link = args[1]; 
+    //const link = args[1]; 
+    const link = 'https://www.youtube.com/watch?v=UuLCwPh2bVs'; 
 
     if (!link){
         message.reply('link majmune');
@@ -15,7 +16,7 @@ async function play_youtube(message){
         behaviors: NoSubscriberBehavior.Pause
     });
     
-    const video_info = play.video_info(link);
+    const video_info = await play.video_info(link);
     const stream = await play.stream(link);
 
     const song = {
@@ -38,7 +39,7 @@ async function play_youtube(message){
 
     connection.subscribe(player);
     player.play(audio_resource);
-    
+
     message.reply(`${song.title}`);
 }
 
