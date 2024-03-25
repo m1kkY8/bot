@@ -1,7 +1,8 @@
 module.exports = {
     NaxiCaffe: {
         url: "https://naxidigital-cafe128ssl.streaming.rs:8022/;*.mp3",
-        name: "Naxi Caffe"
+        name: "Naxi Caffe",
+        song_data: "https://www.naxi.rs/stations/rs-cafe.json"
     },
     NaxiRock: {
         url: "https://naxidigital-rock128ssl.streaming.rs:8182/;*.mp3",
