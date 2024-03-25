@@ -1,7 +1,7 @@
 const { Client, Events, GatewayIntentBits, Partials } = require('discord.js');
 const fs = require('node:fs');
 const path = require('node:path');
-const { dev_token, prefix } = require('./config.json');
+const { test_token , prefix } = require('./config.json');
 
 const client = new Client({
     intents: [
@@ -48,7 +48,7 @@ client.on(Events.MessageCreate, message => {
 });
 
 client.once(Events.ClientReady, () => {
-    console.log('dev bot');
+    console.log('Srecko Online');
 });
 
-client.login(dev_token);
+client.login(test_token);
