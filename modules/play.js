@@ -3,13 +3,7 @@ const play = require('synthara-streams');
 
 play.setToken({
     youtube: {
-        cookie: "~/Downloads/youtube.com_cookies.txt",
-    }
-})
-
-play.setToken({
-    youtube: {
-        cookie: "~/Downloads/youtube.com_cookies.txt",
+        cookie: "../youtube.com_cookies.txt",
     }
 })
 
