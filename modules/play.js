@@ -1,5 +1,5 @@
 const { createAudioPlayer, joinVoiceChannel, createAudioResource, StreamType, NoSubscriberBehavior } = require('@discordjs/voice');
-const play = require('play-dl');
+const play = require('synthara-streams');
 
 async function play_youtube(message){
     
@@ -15,14 +15,14 @@ async function play_youtube(message){
         behaviors: NoSubscriberBehavior.Pause
     });
     
+    //const video_info = play.video_info(link, { Proxy: { Host: "socks5://192.252.215.5", Port: 16137 } } );
     const stream = await play.stream(link);
-    const video_info = await play.video_basic_info(link);
-    
-    const song = {
-        title: video_info.video_details.title,
-        duration: video_info.video_details.durationInSec
-    }
 
+//    const song = {
+//        title: video_info.video_details.title,
+//        duration: video_info.video_details.durationInSec
+//    }
+//
     const audio_resource = createAudioResource(stream.stream, {inputType: stream.type});
     const channel = message.member.voice.channel;
 
@@ -39,7 +39,7 @@ async function play_youtube(message){
     connection.subscribe(player);
     player.play(audio_resource);
 
-    message.reply(`${song.title}`);
+    message.reply('amogus');
 }
 
 module.exports = {
