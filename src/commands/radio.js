@@ -55,10 +55,14 @@ function handle_radio(message){
     if(command[1]){
         current_station = parseInt(command[1]) - 1;
 
-        if(isNaN(current_station) || current_station > stations.length - 1){
+        if(isNaN(current_station) || 
+            current_station > stations.length - 1 || 
+            current_station.toString().length != command[1].length) {
+
             message.reply('jebem te ustima');
             return;
         }
+
         play_radio(message, stations[current_station]);
 
     } else {
