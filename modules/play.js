@@ -1,5 +1,11 @@
 const { createAudioPlayer, joinVoiceChannel, createAudioResource, StreamType, NoSubscriberBehavior } = require('@discordjs/voice');
-const play = require('play-dl');
+const play = require('synthara-streams');
+
+play.setToken({
+    youtube: {
+        cookie: "~/Downloads/youtube.com_cookies.txt",
+    }
+})
 
 play.setToken({
     youtube: {
@@ -21,8 +27,14 @@ async function play_youtube(message){
         behaviors: NoSubscriberBehavior.Pause
     });
     
+    //const video_info = play.video_info(link, { Proxy: { Host: "socks5://192.252.215.5", Port: 16137 } } );
     const stream = await play.stream(link);
 
+//    const song = {
+//        title: video_info.video_details.title,
+//        duration: video_info.video_details.durationInSec
+//    }
+//
     const audio_resource = createAudioResource(stream.stream, {inputType: stream.type});
     const channel = message.member.voice.channel;
 
