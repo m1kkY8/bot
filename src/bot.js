@@ -1,6 +1,6 @@
 const { Client, Events } = require('discord.js');
 
-const { token , prefix } = require('../config/config.json');
+const { dev_token, prefix } = require('../config/config.json');
 const { intents, partials} = require('../config/intents.js');
 
 const {load_commands} = require('./util/command_handler.js');
@@ -29,4 +29,4 @@ client.once(Events.ClientReady, () => {
     console.log('Srecko Online');
 });
 
-client.login(token);
+client.login(dev_token);
