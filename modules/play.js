@@ -2,7 +2,9 @@ const { createAudioPlayer, joinVoiceChannel, createAudioResource, StreamType, No
 const play = require('play-dl');
 
 play.setToken({
-    useragent: ["Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36"]
+    youtube: {
+        cookie: "AFmmF2swRQIgKURM09dNOyLP_C4Igu1yP-jUPzKzxlTMo2cJ7XAX0U4CIQDBBVnW4sg6YrD95qrh6ClXtX_J6FoQ0fKB08NBbUbnLw:QUQ3MjNmd1FtTC1lUlVXaUxTWG11alpDOEoyQTk0MzhEMHVGVklXUTBLOTdGOG8yMnQ5UmpXYWtwSDhjcW41UU4tNzFFSGxjNUsxbkhyajdKU2lwbXBlT05GYUoxWlA2YXlrRi0zSEFRdkxrWjVfbnJERVp5OWdzZEpGdHBTTnpzVGtsYlh1eFVjMlFrTFd1WFlvS1dHZ2dqQmFlbkVuajJR",
+    }
 })
 
 async function play_youtube(message){
@@ -36,8 +38,13 @@ async function play_youtube(message){
 
     connection.subscribe(player);
     player.play(audio_resource);
-
+    
+    message.reply('svira');
 }
+
+play.setToken({
+    useragent: ["Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36"],
+});
 
 module.exports = {
     command_name: 'play',
