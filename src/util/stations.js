@@ -1,3 +1,5 @@
+const { EmbedBuilder } = require('discord.js');
+
 const stations = {
     NaxiRock: {
         url: "https://naxidigital-rock128ssl.streaming.rs:8182/;*.mp3",
@@ -51,7 +53,14 @@ function generate_radio_table(){
     for(let i = 0; i < stations.length; i++){
         radio_table += `${i + 1}. ${stations[i].name} \n`;
     }
-    return radio_table;
+
+    const embed = new EmbedBuilder()
+    .setColor(0x800080)
+    .setTitle('Radio')
+    .addFields( { name: 'Dostupne Stanice', value: radio_table })
+    .setTimestamp();
+
+    return embed;
 }
 
 module.exports = {
