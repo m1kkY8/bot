@@ -1,6 +1,12 @@
 const { createAudioPlayer, joinVoiceChannel, createAudioResource, StreamType, NoSubscriberBehavior } = require('@discordjs/voice');
 const play = require('synthara-streams');
 
+play.setToken({
+    youtube: {
+        cookie: "~/Downloads/youtube.com_cookies.txt",
+    }
+})
+
 async function play_youtube(message){
     
     const args = message.content.split(' ');
