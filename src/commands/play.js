@@ -1,4 +1,5 @@
 const play = require('play-dl');
+const { get_len, push_queue, shift_queue, get_table, now_playing} = require('../util/queue.js');
 const { 
     createAudioPlayer,
     joinVoiceChannel,
@@ -8,13 +9,12 @@ const {
 
 
 const player = createAudioPlayer();
-const queue = [];
 let is_playing = false; 
 let connection;
 let subscription;
 
 player.on(AudioPlayerStatus.Idle, () => {
-    if(queue.length === 0){
+    if(get_len() === 0){
         subscription.unsubscribe();
         subscription = null;
         is_playing = false;
@@ -38,33 +38,11 @@ function get_connection(message){
         });
     }
 }
-async function show_queue(message){
-
-    if(queue.length === 0){
-        message.reply('Nema vise');
-        return;
-    }
-
-    let content = "";
-    let index = 1;
-    for (const song of queue){
-        const info = await play.video_basic_info(song);
-        content += (`${index++}. ${info.video_details.title} \n`);
-    }
-
-    message.reply(`${content}`);
-}
-
-async function now_playing(message){
-    const url = queue[0];
-    const info = await play.video_basic_info(url);
-    message.reply(`${info.video_details.title}`);
-}
 
 async function play_song(){
-    if (queue.length){
+    if (get_len()){
 
-        const url = queue[0];
+        const url = shift_queue(); 
         const stream = await play.stream(url);
         const audio_resource = createAudioResource(stream.stream, {inputType: stream.type});
         
@@ -72,13 +50,11 @@ async function play_song(){
         subscription = connection.subscribe(player);
 
         is_playing = true;
-        queue.shift();
     }
 }
 
 function handle_song(message){
     connection = get_connection(message);
-    const s = "";
     const arg = message.content.split(' ')[1];
     if(!arg){
         message.reply(`link majmune`);
@@ -89,7 +65,7 @@ function handle_song(message){
         now_playing(message); 
         return;
     } else if (arg === 'q'){
-        show_queue(message);
+        get_table(message);
         return;
     } else if (arg === 'pause'){
         player.pause();
@@ -105,7 +81,7 @@ function handle_song(message){
         connection.destroy(); 
         return;
     }else { 
-        queue.push(arg);
+        push_queue(arg);
         if(!is_playing){
             play_song(message);
             return;
