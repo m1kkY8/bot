@@ -1,12 +1,11 @@
 const play = require('play-dl');
-const { get_len, push_queue, shift_queue, get_table, now_playing} = require('../util/queue.js');
+const { get_len, push_queue, shift_queue, get_table, now_playing, print_queue} = require('../util/queue.js');
 const { 
     createAudioPlayer,
     joinVoiceChannel,
     createAudioResource,
     AudioPlayerStatus,
 } = require('@discordjs/voice');
-
 
 const player = createAudioPlayer();
 let is_playing = false; 
@@ -15,15 +14,19 @@ let subscription;
 
 player.on(AudioPlayerStatus.Idle, () => {
     if(get_len() === 0){
-        subscription.unsubscribe();
-        subscription = null;
-        is_playing = false;
-        connection.destroy();
+        setTimeout(() => terminate(), 2000);
     }
     play_song();
+    
     return;
 });
 
+function terminate(){
+    subscription.unsubscribe();
+    subscription = null;
+    is_playing = false;
+    connection.destroy();
+}
 
 function get_connection(message){
     const channel = message.member.voice.channel;
@@ -37,6 +40,14 @@ function get_connection(message){
             adapterCreator: message.guild.voiceAdapterCreator
         });
     }
+}
+
+async function search_song(query){
+    const yt_info = await play.search(query, {limit: 1});
+    const url = yt_info[0].url;
+    console.log(url);
+    print_queue();
+    return url;
 }
 
 async function play_song(){
@@ -53,19 +64,38 @@ async function play_song(){
     }
 }
 
-function handle_song(message){
+async function handle_song(message){
     connection = get_connection(message);
-    const arg = message.content.split(' ')[1];
-    if(!arg){
-        message.reply(`link majmune`);
+    const args = message.content.split(' ');
+    args.shift();
+    const arg = args.shift();
+    const query = args.toString();
+
+    if(!args){
+        message.reply(`ne znam sta da radim majmune`);
         return;
     }
+
+    if(arg === 'search' && query){
+        const url = await search_song(query);
+        
+        if(is_playing){
+            push_queue(url);
+        } else {
+            push_queue(url);
+            play_song();
+        }
+
+        return;
+    }
+    
 
     if (arg === 'np'){
         now_playing(message); 
         return;
     } else if (arg === 'q'){
-        get_table(message);
+        const table = await get_table();
+        message.reply(`${table}`);
         return;
     } else if (arg === 'pause'){
         player.pause();
@@ -74,11 +104,7 @@ function handle_song(message){
         player.unpause();
         return;
     } else if (arg === 'stop'){
-        player.stop();
-        subscription.unsubscribe();
-        subscription = null;
-        is_playing = false;
-        connection.destroy(); 
+        terminate();
         return;
     }else { 
         push_queue(arg);

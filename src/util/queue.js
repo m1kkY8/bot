@@ -27,7 +27,7 @@ async function get_table(message){
         content += (`${index++}. ${info.video_details.title} \n`);
     }
 
-    message.reply(`${content}`);
+    return content;
 }
 
 async function now_playing(message){
