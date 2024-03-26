@@ -5,25 +5,32 @@ const {
     generate_list 
 } = require('../util/stations.js');
 
-
 const { 
     createAudioPlayer,
     joinVoiceChannel,
     createAudioResource,
     StreamType,
-    NoSubscriberBehavior 
+    AudioPlayerStatus
 } = require('@discordjs/voice');
 
 let current_station = 0;
+let subscription;
+let connection;
 const stations = generate_list();
+
+const player = createAudioPlayer();
+
+player.on(AudioPlayerStatus.Paused, () => {
+    if(subscription){
+        subscription.unsubscribe();
+        connection.destroy();
+        return;
+    } 
+});
 
 function play_radio(message, station){
 
     let { url, name } = station
-
-    const player = createAudioPlayer({
-        behaviors: NoSubscriberBehavior.Stop
-    });
 
     const song = createAudioResource(url, {inputType: StreamType.Arbitrary });
     const channel = message.member.voice.channel;
@@ -33,14 +40,14 @@ function play_radio(message, station){
         return;
     }
 
-    const connection = joinVoiceChannel({
+    connection = joinVoiceChannel({
         channelId: channel.id, 
         guildId: message.guild.id,
         adapterCreator: message.guild.voiceAdapterCreator });
 
-    connection.subscribe(player);
+    subscription = connection.subscribe(player);
     player.play(song);
-
+        
     message.reply(`Svira ${name}`);
 }
 
@@ -50,6 +57,9 @@ function handle_radio(message){
     if(command[1] === 'np'){
         get_song_info(message, stations[current_station]);
         return;
+    } else if (command[1] === 'stop'){
+        player.pause();
+        return; 
     }
 
     if(command[1]){
