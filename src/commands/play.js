@@ -1,11 +1,6 @@
 const play = require('play-dl');
 const { get_len, push_queue, shift_queue, get_table, now_playing, print_queue} = require('../util/queue.js');
-const { 
-    createAudioPlayer,
-    joinVoiceChannel,
-    createAudioResource,
-    AudioPlayerStatus,
-} = require('@discordjs/voice');
+const { createAudioPlayer, joinVoiceChannel, createAudioResource, AudioPlayerStatus, } = require('@discordjs/voice');
 
 const player = createAudioPlayer();
 let is_playing = false; 
@@ -17,7 +12,6 @@ player.on(AudioPlayerStatus.Idle, () => {
         setTimeout(() => terminate(), 2000);
     }
     play_song();
-    
     return;
 });
 
@@ -26,6 +20,7 @@ function terminate(){
     subscription = null;
     is_playing = false;
     connection.destroy();
+    return; 
 }
 
 function get_connection(message){
@@ -56,7 +51,7 @@ async function play_song(){
         const url = shift_queue(); 
         const stream = await play.stream(url);
         const audio_resource = createAudioResource(stream.stream, {inputType: stream.type});
-        
+
         player.play(audio_resource);
         subscription = connection.subscribe(player);
 
@@ -78,17 +73,16 @@ async function handle_song(message){
 
     if(arg === 'search' && query){
         const url = await search_song(query);
-        
+
         if(is_playing){
             push_queue(url);
+            return;
         } else {
             push_queue(url);
             play_song();
+            return;
         }
-
-        return;
     }
-    
 
     if (arg === 'np'){
         now_playing(message); 
@@ -105,7 +99,6 @@ async function handle_song(message){
         return;
     } else if (arg === 'stop'){
         terminate();
-        return;
     }else { 
         push_queue(arg);
         if(!is_playing){
@@ -116,6 +109,6 @@ async function handle_song(message){
 }
 
 module.exports = {
-        command: handle_song,
-        command_name: "yt"
+    command: handle_song,
+    command_name: "yt"
 }
