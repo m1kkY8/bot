@@ -3,7 +3,7 @@ const cheerio = require('cheerio');
 
 function get_song_info(message, station) {
 
-    const { info } = station; 
+    const { name, info } = station; 
 
     axios.get(info)
         .then(response => {
@@ -14,7 +14,7 @@ function get_song_info(message, station) {
             const currentSongDetails = $('.details p').text();
             const [artist, songName] = currentSongDetails.split(' - ');
 
-            message.reply(`${artist.trim()} - ${songName.trim()}`);
+            message.reply(`${name}: ${artist.trim()} - ${songName.trim()}`);
         })
         .catch(error => {
             console.error('Uhvatili smo kurac zbog:', error);
