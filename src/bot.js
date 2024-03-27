@@ -1,4 +1,4 @@
-const { Client, Events, } = require('discord.js');
+const { Client, Events } = require('discord.js');
 
 const { dev_token, prefix } = require('../config/config.json');
 const { intents, partials} = require('../config/intents.js');
