@@ -39,7 +39,7 @@ function play_radio(message, station){
         message.reply(`nisi u vojsu majmune`);
         return;
     }
-
+    
     connection = joinVoiceChannel({
         channelId: channel.id, 
         guildId: message.guild.id,
