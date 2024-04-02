@@ -1,21 +1,28 @@
 const play = require('play-dl');
-const { get_len, push_queue, shift_queue, get_table, print_queue } = require('../util/queue.js');
-const { createAudioPlayer, joinVoiceChannel, createAudioResource, AudioPlayerStatus, } = require('@discordjs/voice');
+const { is_queue_empty, push_queue, shift_queue } = require('../util/queue.js');
+const { get_yt_song } = require('../util/get_song_info.js');
+const { joinVoiceChannel, createAudioResource, AudioPlayerStatus } = require('@discordjs/voice');
 
-const player = createAudioPlayer();
+const player = require('../util/player.js');
+
 let is_playing = false; 
 let connection;
 let subscription;
 let currently_playing;
 
 player.on(AudioPlayerStatus.Idle, () => {
-    if(get_len() === 0){
-        setTimeout(() => terminate(), 2000);
-        terminate;
-    }
     play_song();
     return;
 });
+
+function validate_url(url){
+    const re = new RegExp('^(https?\:\/\/)?((www\.)?youtube\.com|youtu\.be)\/.+$');
+    if( re.exec(url)){
+        return true;
+    }
+
+    return false;
+}
 
 function terminate(){
     subscription.unsubscribe();
@@ -43,31 +50,22 @@ function get_connection(message){
     }
 }
 
-async function search_song(query, message){
-    const yt_info = await play.search(query, {limit: 1});
-    const url = yt_info[0].url;
-    const title = yt_info[0].title;
-    message.reply(title);
-
-    return url;
-}
-
 async function play_song(){
-    print_queue();
-    if (get_len()){
+    if (!is_queue_empty()){
 
-        const url = shift_queue();
-        console.log(url);
-        const yt_info = await play.video_info(url); 
+        const { url, title } = shift_queue();
         const stream = await play.stream(url);
-        
-        currently_playing = yt_info.video_details.title;
+
+        currently_playing = title; 
         const audio_resource = createAudioResource(stream.stream, {inputType: stream.type});
 
         player.play(audio_resource);
         subscription = connection.subscribe(player);
 
         is_playing = true;
+    } else {
+        player.stop();
+        return;
     }
 }
 
@@ -76,35 +74,42 @@ async function handle_song(message){
     const args = message.content.split(' ').slice(1);
     const arg = args[0];
 
-    if(!args){
-        message.reply(`ne znam sta da radim majmune`);
-        return;
-    }
-
-    if (arg === 'np'){
-        now_playing(message); 
-        return;
-    } else if (arg === 'q'){
-        const table = await get_table();
-        message.reply(`${table}`);
-        return;
-    } else if (arg === 'pause'){
-        player.pause();
-        return;
-    } else if (arg === 'resume'){
-        player.unpause();
-        return;
-    } else if (arg === 'stop'){
-        terminate();
-        return;
-    } else { 
-        if(!is_playing){
-            play_song(message);
+    if(args.length === 0){
+        if(is_queue_empty()){
+            message.reply(`ne znam sta da radim majmune`);
+            return;
+        } else {
+            play_song();
             return;
         }
+    }
 
-        push_queue(arg);
-        return;
+    if(arg){
+        if (arg === 'np'){
+            now_playing(message); 
+            return;
+        } else if (arg === 'pause'){
+            player.pause();
+            return;
+        } else if (arg === 'skip'){
+            play_song();
+            return;
+
+        } else if (arg === 'resume'){
+            player.unpause();
+            return;
+        } else if (arg === 'stop'){
+            terminate();
+            return;
+        } else { 
+            const info = await get_yt_song(arg);
+            push_queue(info);
+            if(!is_playing){
+                play_song();
+                message.reply(info.title);
+                return;
+            }
+        }
     }
 }
 

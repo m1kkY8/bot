@@ -11,7 +11,7 @@ async function search_song(message){
 
     if (url){
         message.reply(title);
-        push_queue(url);
+        push_queue({url: url, title: title});
         return;
     }
     

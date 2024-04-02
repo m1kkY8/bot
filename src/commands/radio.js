@@ -1,12 +1,13 @@
 const { get_song_info } = require('../util/get_song_info.js');
 
+const player = require('../util/player.js');
+
 const { 
     generate_radio_table,
     generate_list 
 } = require('../util/stations.js');
 
 const { 
-    createAudioPlayer,
     joinVoiceChannel,
     createAudioResource,
     StreamType,
@@ -17,8 +18,6 @@ let current_station = 0;
 let subscription;
 let connection;
 const stations = generate_list();
-
-const player = createAudioPlayer();
 
 player.on(AudioPlayerStatus.Paused, () => {
     if(subscription){
