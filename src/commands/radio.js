@@ -1,23 +1,13 @@
-const { get_song_info } = require('../util/get_song_info.js');
+const { get_radio_song } = require('../util/get_radio_song.js');
+const { generate_radio_table } = require('../util/generate_radio_table.js');
+
+const { joinVoiceChannel, createAudioResource, StreamType, AudioPlayerStatus } = require('@discordjs/voice');
 
 const player = require('../util/player.js');
-
-const { 
-    generate_radio_table,
-    generate_list 
-} = require('../util/stations.js');
-
-const { 
-    joinVoiceChannel,
-    createAudioResource,
-    StreamType,
-    AudioPlayerStatus
-} = require('@discordjs/voice');
 
 let current_station = 0;
 let subscription;
 let connection;
-const stations = generate_list();
 
 player.on(AudioPlayerStatus.Paused, () => {
     if(subscription){
@@ -54,7 +44,7 @@ function handle_radio(message){
     const command = message.content.toLowerCase().split(" ");
 
     if(command[1] === 'np'){
-        get_song_info(message, stations[current_station]);
+        get_radio_song(message, stations[current_station]);
         return;
     } else if (command[1] === 'stop'){
         player.pause();

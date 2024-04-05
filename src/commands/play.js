@@ -1,6 +1,6 @@
 const play = require('play-dl');
 const { is_queue_empty, push_queue, shift_queue } = require('../util/queue.js');
-const { get_yt_song } = require('../util/get_song_info.js');
+const { get_yt_song } = require('../util/get_youtube_song.js');
 const { joinVoiceChannel, createAudioResource, AudioPlayerStatus } = require('@discordjs/voice');
 
 const player = require('../util/player.js');
@@ -14,15 +14,6 @@ player.on(AudioPlayerStatus.Idle, () => {
     play_song();
     return;
 });
-
-function validate_url(url){
-    const re = new RegExp('^(https?\:\/\/)?((www\.)?youtube\.com|youtu\.be)\/.+$');
-    if( re.exec(url)){
-        return true;
-    }
-
-    return false;
-}
 
 function terminate(){
     subscription.unsubscribe();
