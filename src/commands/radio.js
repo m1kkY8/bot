@@ -1,10 +1,12 @@
 const { get_radio_song } = require('../util/get_radio_song.js');
 const { generate_radio_table } = require('../util/generate_radio_table.js');
+const { get_stations } = require('../util/stations.js');
 
 const { joinVoiceChannel, createAudioResource, StreamType, AudioPlayerStatus } = require('@discordjs/voice');
 
 const player = require('../util/player.js');
 
+const stations = get_stations();
 let current_station = 0;
 let subscription;
 let connection;
@@ -18,7 +20,8 @@ player.on(AudioPlayerStatus.Paused, () => {
 });
 
 function play_radio(message, station){
-
+    
+    console.log(station);
     let { url, name } = station
 
     const song = createAudioResource(url, {inputType: StreamType.Arbitrary });

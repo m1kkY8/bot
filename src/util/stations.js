@@ -37,7 +37,13 @@ const stations = {
 }
 
 function get_stations() {
-    return stations;
+    const station_list = [];
+
+    Object.entries(stations).forEach((ent) => {
+        let val = ent[1];
+        station_list.push(val);
+    });
+    return station_list;
 }
 
 module.exports = {
