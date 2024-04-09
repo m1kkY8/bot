@@ -1,16 +1,25 @@
 const play = require('play-dl');
 const queue = [];
 
+function is_queue_empty(){
+    return queue.length === 0;
+}
+
 function shift_queue(){
     return queue.shift();
 }
 
-function push_queue(url){
-    queue.push(url); 
+async function push_queue(info){
+    queue.push(info); 
+
 }
 
 function print_queue(){
     console.log(queue);
+}
+
+function get_queue(){
+    return queue;
 }
 
 async function get_table(message){
@@ -27,7 +36,7 @@ async function get_table(message){
         content += (`${index++}. ${info.video_details.title} \n`);
     }
 
-    return content;
+    message.reply(content);
 }
 
 async function now_playing(message){
@@ -36,7 +45,7 @@ async function now_playing(message){
     message.reply(`${info.video_details.title}`);
 }
 
-function get_len(){
+function get_queue_length(){
     return queue.length;
 }
 
@@ -46,5 +55,7 @@ module.exports = {
     print_queue,
     get_table,
     now_playing,
-    get_len
+    get_queue_length,
+    is_queue_empty,
+    get_queue
 }

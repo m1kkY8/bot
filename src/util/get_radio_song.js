@@ -1,7 +1,7 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
 
-function get_song_info(message, station) {
+function get_radio_song(message, station) {
 
     const { name, info } = station; 
 
@@ -22,5 +22,5 @@ function get_song_info(message, station) {
 }
 
 module.exports = {
-    get_song_info
+    get_radio_song
 }

@@ -17,7 +17,7 @@ client.on(Events.MessageCreate, message => {
         const args = message.content.toLowerCase().split(' ');
         const cmd_name = args[0].substring(1);
         const command = commands
-            .find(cmd => cmd.command_name.startsWith(cmd_name));
+            .find(cmd => cmd.command_name === cmd_name);
         
         if(command){
             command.command(message);
