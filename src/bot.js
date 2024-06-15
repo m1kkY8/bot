@@ -3,7 +3,7 @@ const { Client, Events } = require('discord.js');
 const { token, prefix } = require('../config/config.json');
 const { intents, partials } = require('../config/intents.js');
 
-const {load_commands } = require('./util/command_handler.js');
+const { load_commands } = require('./util/command_handler.js');
 
 const client = new Client({ intents, partials });
 

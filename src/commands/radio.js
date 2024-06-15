@@ -21,7 +21,6 @@ player.on(AudioPlayerStatus.Paused, () => {
 
 function play_radio(message, station){
     
-    console.log(station);
     let { url, name } = station
 
     const song = createAudioResource(url, {inputType: StreamType.Arbitrary });

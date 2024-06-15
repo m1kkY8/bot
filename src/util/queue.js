@@ -14,10 +14,6 @@ async function push_queue(info){
 
 }
 
-function print_queue(){
-    console.log(queue);
-}
-
 function get_queue(){
     return queue;
 }
@@ -52,7 +48,6 @@ function get_queue_length(){
 module.exports = {
     shift_queue,
     push_queue,
-    print_queue,
     get_table,
     now_playing,
     get_queue_length,

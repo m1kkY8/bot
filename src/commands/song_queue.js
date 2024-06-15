@@ -4,7 +4,6 @@ function song_queue(message){
     
     const queue = get_queue(); 
 
-    console.log(queue);
     if(is_queue_empty()){
         message.reply('Nema vise');
         return;
