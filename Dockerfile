@@ -1,4 +1,5 @@
 FROM node:21
+RUN apt-get update && apt-get install ffmpeg -y
 
 # Create app directory
 WORKDIR /usr/app
